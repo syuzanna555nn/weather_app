@@ -1,0 +1,35 @@
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.weather {
+  max-width: 375px;
+  margin: auto;
+  min-height: 100vh;
+
+  &__info {
+    position: relative;
+    z-index: 1;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0px -16px 40px rgba(0, 0, 0, 0.2);
+    margin-top: -20px;
+    background-color: white;
+
+  }
+}
+
+
+img {
+  max-width: 100%;
+}
+
+p {
+  margin: 0;
+}
+
