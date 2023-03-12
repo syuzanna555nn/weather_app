@@ -9,7 +9,10 @@
     "build": "parcel build --no-source-maps src/*.html",
     "dev": "parcel src/index.html --open",
     "start": "npm run build && npm run dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "npx eslint src test",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "npx prettier src test --check",
+    "prettier:fix": "npm run prettier -- --write"
   },
   "devDependencies": {
     "eslint": "^8.36.0",
@@ -21,6 +24,7 @@
     "sass": "^1.32.4"
   },
   "dependencies": {
+    "eslint-plugin-prettier": "^4.2.1",
     "normalize.css": "^8.0.1"
   }
 }
