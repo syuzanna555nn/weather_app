@@ -31,7 +31,7 @@ setInterval(() => {
     let currenTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     document.getElementById(
         'current-day'
-    ).innerHTML = `${d}, ${currentDay}${m} ${Y} <br> ${currenTime}`;
+    ).innerHTML = `${d}, ${currentDay} ${m} ${Y} <br> ${currenTime}`;
 });
 
 const getData = async () => {
@@ -43,15 +43,19 @@ const getData = async () => {
 };
 
 // const changeDarkLightTheme = (sunrise, sunset) => {
-//     const date = new Date();
+//     const date = Math.floor(new Date() / 1000);
+//     console.log(date);
+//
 //     if (date >= sunrise && date < sunset) {
-//         document.getElementById(
-//             'weather-day'
-//         ).innerHTML = `<img alt="day_state" src="../img/city_day.jpg">`;
-//     } else if (date >= sunset && date < sunrise) {
-//         document.getElementById(
-//             'weather-day'
-//         ).innerHTML = `<img alt="day_state" src="../img/city_night.jpg">`;
+//         // document.getElementById(
+//         //     'weather-day'
+//         // ).innerHTML = `<img alt="day_state" src="../img/city_day.jpg">`;
+//         console.log('day');
+//     } else if (date > sunset && date < sunrise) {
+//         // document.getElementById(
+//         //     'weather-day'
+//         // ).innerHTML = `<img alt="day_state" src="../img/city_night.jpg">`;
+//         console.log('night');
 //     }
 // };
 
@@ -60,7 +64,22 @@ const parseMillisecondsIntoReadableTime = (seconds) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
-// const getDayTime = (timeNight, timeDay) => {};
+const getDayTime = (timeSunset, timeSunrise) => {
+    const timeOfSunset = new Date(timeSunset * 1000);
+    const hoursOfSunset = timeOfSunset.getHours();
+    const minutesOfSunset = timeOfSunset.getMinutes();
+    const timeOfSunsetInMinutes = hoursOfSunset * 60 + minutesOfSunset;
+
+    const timeOfSunrise = new Date(timeSunrise * 1000);
+    const hoursOfSunrise = timeOfSunrise.getHours();
+    const minutesOfSunrise = timeOfSunrise.getMinutes();
+    const timeOfSunriseMinutes = hoursOfSunrise * 60 + minutesOfSunrise;
+
+    const dayTimeInMinutes = ((timeOfSunsetInMinutes - timeOfSunriseMinutes) / 60)
+        .toFixed(2)
+        .split('.');
+    return (realDayTime = `${dayTimeInMinutes[0]}h ${dayTimeInMinutes[1]}m`);
+};
 
 const setData = (data) => {
     const temp = document.getElementById('celsius-field');
@@ -72,7 +91,7 @@ const setData = (data) => {
     const wind = document.getElementById('wind');
     const sunrise = document.getElementById('sunrise');
     const sunset = document.getElementById('sunset');
-    // const dayTime = document.getElementById('dayTime');
+    const dayTime = document.getElementById('dayTime');
     temp.innerHTML = Math.floor(data.main.temp) + temp.innerHTML;
     maxTemp.innerHTML = Math.floor(data.main.temp_max) + maxTemp.innerHTML;
     minTemp.innerHTML = Math.floor(data.main.temp_min) + minTemp.innerHTML;
@@ -84,8 +103,8 @@ const setData = (data) => {
     wind.innerHTML = data.wind.speed + wind.innerHTML;
     sunrise.innerHTML = parseMillisecondsIntoReadableTime(data.sys.sunrise) + sunrise.innerHTML;
     sunset.innerHTML = parseMillisecondsIntoReadableTime(data.sys.sunset) + sunset.innerHTML;
-    // changeDarkLightTheme(sunrise, sunset);
-    // dayTime.innerHTML = getDayTime(data.sys.sunset, data.sys.sunrise);
+    // changeDarkLightTheme(data.sys.sunrise, data.sys.sunset);
+    dayTime.innerHTML = getDayTime(data.sys.sunset, data.sys.sunrise);
 };
 
 window.addEventListener('load', () => {
